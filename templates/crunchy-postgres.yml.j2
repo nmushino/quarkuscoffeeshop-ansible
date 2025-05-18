@@ -18,7 +18,7 @@ spec:
                 requests:
                   storage: 1Gi
   image: registry.connect.redhat.com/crunchydata/crunchy-postgres@sha256:75a4247265bea34f10f77367e33a5d3e54081d28c272421ede499c6d9d733a68
-  instances:
+  instances: coffeeshopdb
     - dataVolumeClaimSpec:
         accessModes:
           - ReadWriteOnce
@@ -28,7 +28,7 @@ spec:
       name: ''
       replicas: 1
   port: 5432
-  postgresVersion: 17
+  postgresVersion: 16
   users:
     - databases:
         - coffeeshopdb
