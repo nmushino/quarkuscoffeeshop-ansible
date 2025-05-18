@@ -19,6 +19,30 @@ spec:
       referencePolicy:
         type: Source
 ---
+# ClusterRole に poddisruptionbudgets へのアクセス権限を追加
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pgo-cluster-role
+rules:
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["get", "list", "watch"]
+---
+# ClusterRoleBinding が ServiceAccount を正しく参照していることを確認
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pgo-cluster-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pgo-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: pgo
+    namespace: openshift-operators
+---
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
