@@ -18,14 +18,16 @@
       - "postgres-operator.crunchydata.com/control-plane=postgres-operator"
   register: pgo_pods
   until: >
-    pgo_pods.resources | length > 0 and
-    (
-      pgo_pods.resources | selectattr('status.containerStatuses[0].ready', 'equalto', true) | list | length
-    ) > 0
+    pgo_pods.resources | selectattr('status.containerStatuses', 'defined') |
+    selectattr('status.containerStatuses', '!=', None) |
+    selectattr('status.containerStatuses', '!=', []) |
+    selectattr('status.containerStatuses[0].ready', 'defined') |
+    selectattr('status.containerStatuses[0].ready', 'equalto', true) |
+    list | length > 0
   retries: 20
   delay: 30
   when: not delete_deployment | bool
-  tags: 
+  tags:
     - postgres
     - acm-workload
     - helm
