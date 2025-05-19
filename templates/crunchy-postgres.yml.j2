@@ -6,8 +6,7 @@ metadata:
 spec:
   backups:
     pgbackrest:
-      image: >-
-        registry.connect.redhat.com/crunchydata/crunchy-pgbackrest@sha256:ccd5291f05c5d47345f32033840c4830e10a0e507c8e57f59b0271caccc37841
+      image: registry.connect.redhat.com/crunchydata/crunchy-pgbackrest@sha256:ccd5291f05c5d47345f32033840c4830e10a0e507c8e57f59b0271caccc37841
       repos:
         - name: repo1
           volume:
@@ -27,11 +26,9 @@ spec:
         resources:
           requests:
             storage: 1Gi
-      replicas: 1
   port: 5432
   postgresVersion: 17
   users:
-    - databases:
+    - name: coffeeshopadmin
+      databases:
         - coffeeshopdb
-      name: coffeeshopadmin
-
