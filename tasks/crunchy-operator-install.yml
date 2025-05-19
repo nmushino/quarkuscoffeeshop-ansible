@@ -15,7 +15,7 @@
     kind: Pod
     namespace: openshift-operators
     label_selectors:
-      - "name=pgo"
+      - "postgres-operator.crunchydata.com/control-plane=postgres-operator"
   register: pgo_pods
   until: >
     pgo_pods.resources | length > 0 and
@@ -24,7 +24,7 @@
     ) > 0
   retries: 20
   delay: 30
-  when: not delete_deployment|bool
+  when: not delete_deployment | bool
   tags: 
     - postgres
     - acm-workload
