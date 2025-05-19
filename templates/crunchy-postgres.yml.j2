@@ -18,15 +18,15 @@ spec:
                 requests:
                   storage: 1Gi
   image: registry.connect.redhat.com/crunchydata/postgres-operator@sha256:2e010468471f3c55acdfe67e7b71d15af973fb5708d4a1199eeace03e4da4d69
-  instances: 
-    -name: coffeeshopdb
-    - dataVolumeClaimSpec:
+  instances:
+    - name: coffeeshopdb
+      replicas: 1
+      dataVolumeClaimSpec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
             storage: 1Gi
-      name: ''
       replicas: 1
   port: 5432
   postgresVersion: 17
