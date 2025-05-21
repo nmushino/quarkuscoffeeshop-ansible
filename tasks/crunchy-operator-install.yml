@@ -15,22 +15,16 @@
     kind: Pod
     namespace: "{{ project_namespace }}"
     label_selectors:
-      - "postgres-operator.crunchydata.com/control-plane=postgres-operator"
-  register: pgo_pods
-  until: >
-    pgo_pods.resources | selectattr('status.containerStatuses', 'defined') |
-    selectattr('status.containerStatuses', '!=', None) |
-    selectattr('status.containerStatuses', '!=', []) |
-    selectattr('status.containerStatuses[0].ready', 'defined') |
-    selectattr('status.containerStatuses[0].ready', 'equalto', true) |
-    list | length > 0
-  retries: 20
-  delay: 30
-  when: not delete_deployment | bool
-  tags:
-    - postgres
-    - acm-workload
-    - helm
+      - metadata.name={{ crunchystartingCSV }}
+    register: r_pgo_crd
+    retries: 20
+    delay: 60
+    until: r_pgo_crd.resources | list | length == 1
+    when: not delete_deployment|bool
+    tags: 
+      - postgres
+      - acm-workload
+      - helm
 
 - name: Create Crunchy Postgres database instance 
   kubernetes.core.k8s:
