@@ -4,7 +4,7 @@ kind: Subscription
 metadata:
   generation: 1
   name: amq-streams
-  namespace: openshift-operators
+  namespace: {{ project_namespace }}
 spec:
   channel: {{ amqchannel }}
   installPlanApproval: Automatic
