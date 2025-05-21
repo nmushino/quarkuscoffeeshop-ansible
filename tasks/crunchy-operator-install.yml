@@ -13,7 +13,7 @@
 - name: Wait for Crunchy Postgres operator pod to be ready
   kubernetes.core.k8s_info:
     kind: Pod
-    namespace: openshift-operators
+    namespace: "{{ project_namespace }}"
     label_selectors:
       - "postgres-operator.crunchydata.com/control-plane=postgres-operator"
   register: pgo_pods
