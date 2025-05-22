@@ -64,14 +64,13 @@
   kubernetes.core.k8s_info:
     api_version: postgres-operator.crunchydata.com/v1beta1
     kind: PostgresCluster
-    name: coffeeshopdb
     namespace: "{{ project_namespace }}"
   register: r_pgo_status
   retries: 20
   delay: 60
-  until: r_pgo_crd.resources | list | length == 1
+  until: r_pgo_status.resources[0].status.conditions[1].status == 'True'
   ignore_errors: true
-  when: not delete_deployment | bool
+  when: not delete_deployment|bool
   tags:
     - postgres
     - acm-workload
