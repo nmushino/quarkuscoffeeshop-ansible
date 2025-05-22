@@ -36,6 +36,15 @@
       when: not delete_deployment | bool
       tags: always
 
+    - name: Create AMQ Subscription
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', 'operator-group.yaml.j2') }}"
+      register: rbac_result
+      when: not delete_deployment | bool
+      tags: 
+        - always
+        
     - name: AMQ Streams installation
       include_tasks: amq-streams-install.yml
       when: not delete_deployment | bool
