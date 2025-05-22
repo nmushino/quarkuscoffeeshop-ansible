@@ -36,14 +36,13 @@
       when: not delete_deployment | bool
       tags: always
 
-    - name: Create Opeator Group
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', 'operator-group.yaml.j2') }}"
-      register: rbac_result
-      when: not delete_deployment | bool
-      tags: 
-        - always
+#    - name: Create Opeator group
+#      kubernetes.core.k8s:
+#        state: present
+#        definition: "{{ lookup('template', 'operator-group.yaml.j2') }}"
+#      when: not delete_deployment | bool
+#      tags: 
+#        - always
         
     - name: AMQ Streams installation
       include_tasks: amq-streams-install.yml
