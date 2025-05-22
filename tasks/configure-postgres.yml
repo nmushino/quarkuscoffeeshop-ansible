@@ -18,6 +18,16 @@
     - acm-workload
     - helm
 
+- name: Create Opeator group
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'operator-group.yaml.j2') }}"
+  when: not delete_deployment | bool
+  tags: 
+    - postgres
+    - acm-workload
+    - helm
+
 - name:  Check if postgres-operator is running 
   shell: "{{ oc_location }} get pods  -n openshift-operators | grep Running | grep -E -o 'pgo-[0-9a-z][0-9a-z].*-[0-9a-z]{5}'"
   register: get_operator
