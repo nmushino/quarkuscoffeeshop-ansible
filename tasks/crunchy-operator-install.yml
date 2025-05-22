@@ -76,20 +76,24 @@
     - acm-workload
     - helm
 
-- name: Get PostgresCluster status
+- name: Wait for coffeeshopdb to be ready new
   kubernetes.core.k8s_info:
     api_version: postgres-operator.crunchydata.com/v1beta1
     kind: PostgresCluster
     namespace: "{{ project_namespace }}"
+    name: coffeeshopdb
   register: r_pgo_status
+  until: >
+    r_pgo_status.resources | length > 0 and
+    r_pgo_status.resources[0].status is defined and
+    r_pgo_status.resources[0].status.conditions is defined and
+    (
+      r_pgo_status.resources[0].status.conditions | selectattr('type', 'equalto', 'Ready')
+      | selectattr('status', 'equalto', 'True')
+      | list | length > 0
+    )
   retries: 20
-  delay: 60
-  until: r_pgo_status.resources | length > 0 and
-         r_pgo_status.resources[0].status is defined and
-         r_pgo_status.resources[0].status.conditions is defined and
-         r_pgo_status.resources[0].status.conditions | length > 1 and
-         r_pgo_status.resources[0].status.conditions[1].status == "True"
-  ignore_errors: true
+  delay: 30
   tags:
     - postgres
     - acm-workload
