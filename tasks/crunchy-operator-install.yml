@@ -69,12 +69,7 @@
   register: r_pgo_status
   retries: 20
   delay: 60
-  until: >
-    r_pgo_status.resources | length > 0 and
-    r_pgo_status.resources[0].status is defined and
-    r_pgo_status.resources[0].status.conditions is defined and
-    r_pgo_status.resources[0].status.conditions | length > 1 and
-    r_pgo_status.resources[0].status.conditions[1].status == "True"
+  until: r_pgo_crd.resources | list | length == 1
   ignore_errors: true
   when: not delete_deployment | bool
   tags:
