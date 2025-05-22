@@ -3,9 +3,7 @@ kind: OperatorGroup
 metadata:
   name: amq-streams-group
   namespace: {{ project_namespace }}
-spec:
-  targetNamespaces:
-    - {{ project_namespace }}
+spec: {}
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
