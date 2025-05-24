@@ -21,7 +21,23 @@ spec:
     - name: Crunchy Postgres for Kubernetes
       postgresClusterSelector:
         matchLabels:
-          postgres-operator.crunchydata.com/cluster: hippo
+          postgres-operator.crunchydata.com/cluster: coffeeshopdb
+  podTemplate:
+  metadata: {}
+  spec:
+    volumes:
+      - name: pgadmin4-json
+        configMap:
+          name: pgadmin4-servers
+          items:
+            - key: pgadmin4.json
+              path: pgadmin4.json
+    containers:
+      - name: pgadmin
+        volumeMounts:
+          - name: servers-json
+            mountPath: /pgadmin4/pgadmin4.json
+            subPath: pgadmin4.json
 ---
 apiVersion: v1
 kind: Secret
@@ -60,3 +76,24 @@ spec:
     targetPort: http
   tls:
     termination: edge
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgadmin4-servers
+  namespace: {{ project_namespace }}
+data:
+  pgadmin4.json: |
+    {
+      "Servers": {
+        "1": {
+          "Name": "coffeeshop",
+          "Group": "Servers",
+          "Host": "coffeeshopdb-primary.quarkuscoffeeshop-demo.svc",
+          "Port": 5432,
+          "MaintenanceDB": "coffeeshopdb",
+          "Username": "coffeeshopadmin",
+          "SSLMode": "prefer"
+        }
+      }
+    }
