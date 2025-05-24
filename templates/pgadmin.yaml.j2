@@ -22,10 +22,10 @@ spec:
       postgresClusterSelector:
         matchLabels:
           postgres-operator.crunchydata.com/cluster: coffeeshopdb
-  config:
-    configDatabaseURI:
-      name: coffeeshopdb-pguser-coffeeshopadmin
-      key: uri
+#  config:
+#    configDatabaseURI:
+#      name: coffeeshopdb-pguser-coffeeshopadmin
+#      key: uri
 ---
 apiVersion: v1
 kind: Secret
