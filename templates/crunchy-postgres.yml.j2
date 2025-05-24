@@ -27,7 +27,7 @@ spec:
           requests:
             storage: 1Gi
   port: 5432
-  postgresVersion: 17
+  postgresVersion: {{ postgres_version }}
   users:
     - name: coffeeshopadmin
       databases:

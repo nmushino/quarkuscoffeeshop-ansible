@@ -1,34 +1,37 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PGAdmin
 metadata:
   name: pgadmin4
   namespace: {{ project_namespace }}
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: pgadmin4
-  template:
-    metadata:
-      labels:
-        app: pgadmin4
-    spec:
-      containers:
-        - name: pgadmin4
-          image: dpage/pgadmin4:latest
-          env:
-            - name: PGADMIN_DEFAULT_EMAIL
-              value: {{ pgadmin_setup_email }}
-            - name: PGADMIN_DEFAULT_PASSWORD
-              value: {{ pgadmin_default_password }}
-          ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: pgadmin-data
-              mountPath: /var/lib/pgadmin
-      volumes:
-        - name: pgadmin-data
-          emptyDir: {}
+  dataVolumeClaimSpec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  serverGroups:
+  users:
+  - username: {{ pgadmin_setup_email }}
+    role: User
+    passwordRef:
+      name: pgadmin4-secret
+      key: password
+  serverGroups:
+    - name: Crunchy Postgres for Kubernetes
+      postgresClusterSelector:
+        matchLabels:
+          postgres-operator.crunchydata.com/cluster: hippo
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pgadmin4-secret
+  namespace: {{ project_namespace }}
+type: Opaque
+stringData:
+  email: {{ pgadmin_setup_email }}
+  password: {{ pgadmin_default_password }}
 ---
 apiVersion: v1
 kind: Service
@@ -37,10 +40,10 @@ metadata:
   namespace: {{ project_namespace }}
 spec:
   selector:
-    app: pgadmin4
+    postgres-operator.crunchydata.com/role: pgadmin
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 5050
       protocol: TCP
       name: http
 ---

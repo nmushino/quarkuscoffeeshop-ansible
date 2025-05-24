@@ -227,17 +227,23 @@ DELETE_DEPLOYMENT=false
 DEBUG=-v
 ```
 
+```
 ./deploy.sh setup
+```
 
 その後、piplines.sh にてアプリのデプロイを行う。
 
+```
 ./pipline.sh deploy
+```
 
 そして、SiteA、SiteB、SiteCに適切にSkupperにてVCPをはり、通信確立してからKafkaでSyncする。
 
+```
 ./skupper-asite.sh deploy
 ./skupper-bsite.sh deploy
 ./skupper-csite.sh deploy
+```
 
 To-Do
 -------
@@ -249,7 +255,7 @@ To-Do
 
 トラブルシュート
 -------
-プロジェクトがどうしても消えない場合の対策
+##プロジェクトがどうしても消えない場合の対策
 JSON を取得
 ```oc get namespace quarkuscoffeeshop-demo -o json > quarkuscoffeeshop-demo.json```
 spec.finalizers を空にする
