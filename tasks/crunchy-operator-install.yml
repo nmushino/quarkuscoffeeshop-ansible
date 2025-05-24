@@ -84,7 +84,15 @@
     namespace: "{{ project_namespace }}"
     name: coffeeshopdb
   register: r_pgo_status
-  until: pg_status.resources[0].status.conditions | selectattr('type', 'equalto', 'Ready') | selectattr('status', 'equalto', 'True') | list | length > 0
+  until: >
+    r_pgo_status is defined and
+    r_pgo_status.resources is defined and
+    r_pgo_status.resources | length > 0 and
+    r_pgo_status.resources[0].status.conditions is defined and
+    r_pgo_status.resources[0].status.conditions |
+      selectattr('type', 'equalto', 'Ready') |
+      selectattr('status', 'equalto', 'True') |
+      list | length > 0
   retries: 20
   delay: 10
   tags:
