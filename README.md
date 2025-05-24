@@ -214,6 +214,7 @@ oc get crds -o name | grep '.*\.strimzi\.io' | xargs -r -n 1 oc delete
 
 OpenShiftへのデプロイ手順
 ---------------
+
 ```
 CLUSTER_DOMAIN_NAME=cluster-pxhhz.pxhhz.sandbox3005.opentlc.com
 TOKEN=sha256~0BymbhZIW1nU91RfcxyjPXR2YvCD0cWThgcGzxd_LnU
@@ -255,16 +256,23 @@ To-Do
 
 トラブルシュート
 -------
+
 ##プロジェクトがどうしても消えない場合の対策
+
 JSON を取得
+
 ```oc get namespace quarkuscoffeeshop-demo -o json > quarkuscoffeeshop-demo.json```
+
 spec.finalizers を空にする
+
 ```
 "spec": {
   "finalizers": []
 }
 ```
+
 curl で送信
+
 ```
 curl -k -H "Authorization: Bearer $(oc whoami -t)" \
      -H "Content-Type: application/json" \
