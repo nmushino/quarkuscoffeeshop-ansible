@@ -247,6 +247,26 @@ To-Do
 * QuarkusバージョンとJavaのバージョンアップをする
 * Piplineメニューを2回実行しないといけない問題の回避検討
 
+トラブルシュート
+-------
+プロジェクトがどうしても消えない場合の対策
+JSON を取得
+```oc get namespace quarkuscoffeeshop-demo -o json > quarkuscoffeeshop-demo.json```
+spec.finalizers を空にする
+```
+"spec": {
+  "finalizers": []
+}
+```
+curl で送信
+```
+curl -k -H "Authorization: Bearer $(oc whoami -t)" \
+     -H "Content-Type: application/json" \
+     -X PUT \
+     --data-binary @quarkuscoffeeshop-demo.json \
+     https://$(oc get infrastructure cluster -o jsonpath='{.status.apiServerURL}' | sed 's|https://||')/api/v1/namespaces/quarkuscoffeeshop-demo/finalize
+```
+
 License
 -------
 GPLv3
