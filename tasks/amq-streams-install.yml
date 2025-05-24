@@ -16,14 +16,14 @@
     - amq
     - acm-workload
 
-#- name: Create Opeator group
-#  kubernetes.core.k8s:
-#    state: present
-#    definition: "{{ lookup('template', 'operator-group.yaml.j2') }}"
-#  when: not delete_deployment | bool
-#  tags: 
-#  - amq
-#  - acm-workload
+- name: Create Opeator group
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'operator-group.yaml.j2') }}"
+  when: not delete_deployment | bool
+  tags: 
+  - amq
+  - acm-workload
     
 - name: Create AMQ Subscription
   kubernetes.core.k8s:
