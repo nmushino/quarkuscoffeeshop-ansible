@@ -61,44 +61,44 @@
     - helm
 
 # wait for Postgres to be ready
-#- name: Get PostgresCluster status
-#  kubernetes.core.k8s_info:
-#    api_version: postgres-operator.crunchydata.com/v1beta1
-#    kind: PostgresCluster
-#    namespace: "{{ project_namespace }}"
-#  register: r_pgo_status
-#  retries: 20
-#  delay: 60
-#  until: r_pgo_status.resources[0].status.conditions[1].status == 'True'
-#  ignore_errors: true
-#  when: not delete_deployment|bool
-#  tags:
-#    - postgres
-#    - acm-workload
-#    - helm
-
-- name: Wait for coffeeshopdb to be ready new
+- name: Get PostgresCluster status
   kubernetes.core.k8s_info:
     api_version: postgres-operator.crunchydata.com/v1beta1
     kind: PostgresCluster
     namespace: "{{ project_namespace }}"
-    name: coffeeshopdb
   register: r_pgo_status
-  until: >
-    r_pgo_status is defined and
-    r_pgo_status.resources is defined and
-    r_pgo_status.resources | length > 0 and
-    r_pgo_status.resources[0].status.conditions is defined and
-    r_pgo_status.resources[0].status.conditions |
-      selectattr('type', 'equalto', 'Ready') |
-      selectattr('status', 'equalto', 'True') |
-      list | length > 0
   retries: 20
-  delay: 10
+  delay: 60
+  until: r_pgo_status.resources[0].status.conditions[1].status == 'True'
+  ignore_errors: true
+  when: not delete_deployment|bool
   tags:
     - postgres
     - acm-workload
     - helm
+
+#- name: Wait for coffeeshopdb to be ready new
+#  kubernetes.core.k8s_info:
+#    api_version: postgres-operator.crunchydata.com/v1beta1
+#    kind: PostgresCluster
+#    namespace: "{{ project_namespace }}"
+#    name: coffeeshopdb
+#  register: r_pgo_status
+#  until: >
+#    r_pgo_status is defined and
+#    r_pgo_status.resources is defined and
+#    r_pgo_status.resources | length > 0 and
+#    r_pgo_status.resources[0].status.conditions is defined and
+#    r_pgo_status.resources[0].status.conditions |
+#      selectattr('type', 'equalto', 'Ready') |
+#      selectattr('status', 'equalto', 'True') |
+#      list | length > 0
+#  retries: 20
+#  delay: 10
+#  tags:
+#    - postgres
+#    - acm-workload
+#    - helm
 
 - name: retrieve pullsecret
 # Newer version of Ansible call this module k8s_info
