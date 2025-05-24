@@ -21,7 +21,7 @@ Currently tested on
 -------------------
 * OpenShift 4.16.2
 * OpenShift Pipelines: 1.9.0
-* AMQ Streams: 2.9.0-1
+* AMQ Streams: 2.9.0-2
 * Postgres Operator: v5.8.1
 * OpenShift Quay: v3.8.1
 * OpenShift GitOps: v1.7.1
@@ -241,9 +241,8 @@ DEBUG=-v
 
 To-Do
 -------
-* 異なるクラスタにサブアプリをいれるて正常テスト確認
-* OpenMetadataの設定インポートを試す
 * Kafkaコンソールを試す
+* OpenMetadataの設定インポートを試す
 * F2Fの自動テストする
 * QuarkusバージョンとJavaのバージョンアップをする
 * Piplineメニューを2回実行しないといけない問題の回避検討
